@@ -1,9 +1,9 @@
 {
-  "name": "Name that Tune",
+  "name": "name_that_tune_app",
   "version": "0.0.0",
   "description": "A game that allows you to name that tune",
-  "main": "index.js",
-  "author": "Grant Timmerman",
+  "main": "server.js",
+  "author": "Erica Kantor",
   "private": true,
   "license": "BSD",
   "dependencies": {
