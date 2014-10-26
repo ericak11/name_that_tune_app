@@ -37,18 +37,25 @@ $('#send-guess').submit(function(e){
       clearInterval(interval);
       interval = false;
       $('#answer').text("CORRECT").css({color: "rgba(183, 215, 146,1)"})
-      $('iframe').css({opacity: '1'})
+      var styles = {
+        "opacity": "1",
+        "margin-top": "-40px"
+      };
+      $('iframe').css(styles)
       $('#send-song').css({display: ""})
       $('#send-guess').css({display: "none"})
       $('#song').val('');
       $('#hints').empty()
       $('#hint').css({display: "none"})
+      $('#play-button').css({display: "none"})
       clicks = 0;
       addToScore(ppr);
       ppr = 200;
       submit = true;
   } else {
-      $('#answer').text("GUESS AGAIN").css({color: "rgba(238,113, 167,1)"})
+      $('#answer').text("GUESS AGAIN").css({color: "rgba(238,113, 167,1)"}).animate({opacity:0},200,"linear",function(){
+        $(this).animate({opacity:1},200);
+      });
       if (ppr > 0) {
         ppr -= 10;
       }
@@ -60,21 +67,17 @@ $('#send-guess').submit(function(e){
     data = song;
     $track = song.name;
     getSongName(song.name);
-
-    $('#spotify').html("<h1 style='margin-top: 80px;' id='play-button'>PLAY</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0; margin-top: -200px;'></iframe>");
+    $('#spotify').html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
     $('#send-song').css({display: "none"})
     $('#send-guess').css({display: ""})
     $('#hint').css({display: ""})
+    $('#play-button').css({display: ""})
     submit = false;
   });
 
   $('#hint').on('click',function(e){
     e.preventDefault();
     if (clicks === 0) {
-      clicks += 1
-      $('#hints').append($('<li>').text("ALBUM: " + data.album.name));
-      ppr -= 25;
-    } else if (clicks === 1) {
       clicks += 1
       var artists = "";
       if (data.artists.length > 1) {
@@ -91,6 +94,10 @@ $('#send-guess').submit(function(e){
         $('#hints').append($('<li>').text("ARTIST: " + artists));
       }
       artists = "";
+      ppr -= 25;
+    } else if (clicks === 1) {
+       clicks += 1
+      $('#hints').append($('<li>').text("ALBUM: " + data.album.name));
       ppr -= 25;
     } else if (clicks === 2) {
        clicks += 1;
