@@ -2,18 +2,22 @@
 <html>
   <head>
     <title>Name that tune</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href='http://fonts.googleapis.com/css?family=Princess+Sofia|Coming+Soon' rel='stylesheet' type='text/css'>
   </head>
   <body>
-  <h1> NAME THAT TUNE </h1>
+  <h1 id="title"> Name That Tune </h1>
   <h2 id="score"></h2>
-   <form id="send-song">
-      <input id="search" autocomplete="off" placeholder="song search query" /><input type="number" id="time" autocomplete="off" placeholder="time in seconds"/><button id="submit">SUBMIT</button>
+  <h2 id="answer"></h2>
+  <div id="content">
+   <form class="form" id="send-song">
+      <input id="search" autocomplete="off" placeholder="Song Search" /><button id="submit">SUBMIT</button>
   </form>
-  <form id="send-guess" style="display: none;">
+  <form class="form" id="send-guess" style="display: none;">
     <input id="song" autocomplete="off" /><button id="submit">GUESS</button>
   </form><button id="hint" style="display: none;">hint</button>
-  <ul id="hints"></ul>
-  <h2 id="answer"></h2>
+  <ul class="list" id="hints"></ul>
+</div>
   <div id="spotify"></div>
 
 <script src="/socket.io/socket.io.js"></script>

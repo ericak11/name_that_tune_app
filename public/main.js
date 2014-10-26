@@ -2,7 +2,6 @@ var socket = io();
 var $btn = $('#spotify');
 var $track;
 var match;
-var time;
 var data;
 var clicks = 0;
 var score = 0;
@@ -15,13 +14,12 @@ $('#send-song').submit(function(e){
     socket.emit('parse spotify', $('#search').val());
     $('#search').val('');
     $('#answer').text("");
-    time = $('#time').val()
 });
 
 $('#send-guess').submit(function(e){
   e.preventDefault();
   if ($('#song').val().toLowerCase() === match){
-      $('#answer').text("CORRECT")
+      $('#answer').text("CORRECT").css({color: "green"})
       $('iframe').css({opacity: '1'})
       $('#send-song').css({display: ""})
       $('#send-guess').css({display: "none"})
@@ -32,7 +30,8 @@ $('#send-guess').submit(function(e){
       addToScore(ppr);
       ppr = 100;
   } else {
-      $('#answer').text("GUESS AGAIN")
+      $('#answer').text("GUESS AGAIN").css({color: "red"})
+      ppr -= 10;
   }
 });
 
@@ -42,7 +41,7 @@ $('#send-guess').submit(function(e){
     $track = song.name;
     getSongName(song.name);
 
-    $('#spotify').html("<h1 id='play-button'>PLAY</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0; margin-top: -70px;'></iframe>");
+    $('#spotify').html("<h1 style='margin-top: 80px;' id='play-button'>PLAY</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0; margin-top: -200px;'></iframe>");
     $('#send-song').css({display: "none"})
     $('#send-guess').css({display: ""})
     $('#hint').css({display: ""})
@@ -55,22 +54,27 @@ $('#send-guess').submit(function(e){
       $('#hints').append($('<li>').text("ALBUM: " + data.album.name));
       ppr = 75;
     } else if (clicks === 1) {
-      clicks += 1;
-      $('#hints').append($('<li>').html("<img src='"+data.album.images[1].url+"'>"));
-      ppr = 50;
-    } else if (clicks === 2) {
       clicks += 1
       var artists = "";
-      for (var i = 0; i < data.artists.length; i++) {
-        if (i !== data.artists.length -1) {
-          artists += data.artists[i].name + " | ";
-        } else {
-          artists += data.artists[i].name
+      if (data.artists.length > 1) {
+        for (var i = 0; i < data.artists.length; i++) {
+          if (i !== data.artists.length -1) {
+            artists += data.artists[i].name + " | ";
+          } else {
+            artists += data.artists[i].name;
+          }
         }
+        $('#hints').append($('<li>').text("ARTISTS: " + artists));
+      } else {
+        artists += data.artists[0].name;
+        $('#hints').append($('<li>').text("ARTIST: " + artists));
       }
-      $('#hints').append($('<li>').text("ARTISTS: " + artists));
       artists = "";
       ppr = 25;
+    } else if (clicks === 2) {
+       clicks += 1;
+      $('#hints').append($('<li>').html("<img src='"+data.album.images[1].url+"'>"));
+      ppr = 50;
     } else if (clicks === 3) {
       $('#hints').append($('<li>').text("CLICK AGAIN FOR ANSWER"));
       clicks += 1
