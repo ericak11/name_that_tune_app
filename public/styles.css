@@ -4,9 +4,19 @@ body {
 }
 
 #score {
-
+  color: rgba(250, 194, 80, 1);
+  display: inline-block;
+  float:right;
+  padding-right: 30px;
+  padding-top: 10px;
 }
 
+
+#header {
+  height: 100px;
+  background-color: black;
+  padding: 5px;
+}
 .form {
 
 }
@@ -33,12 +43,24 @@ body {
 
 }
 
+#logo {
+  float: left;
+  padding-left: 20px;
+}
+
+#pic {
+  float: left;
+  display: inline-block;
+}
+
 #title {
+  float: right;
+  display: inline-block;
   font-family: 'Princess Sofia', cursive;
-  background-color: black;
-  color: white;
-  height: 60px;
-  padding-top: 10px;
+  color: rgba(68, 197, 235,1);
+  text-align: left;
+  font-size: 45px;
+  margin-top: 20px;
 }
 
 #content {

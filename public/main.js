@@ -5,9 +5,24 @@ var match;
 var data;
 var clicks = 0;
 var score = 0;
-var ppr = 100;
+var ppr = 200;
 var $score = $('#score');
+var interval = false;
+var submit = true;
 
+$('#spotify').on('mouseover', function(){
+  if (!interval && !submit) {
+    console.log("HERE")
+    interval = setInterval(time, 1000);
+  }
+});
+
+function time() {
+  if (ppr > 0) {
+    ppr -= 1;
+    $('#ppr').text("Points: " +ppr);
+  }
+}
 
 $('#send-song').submit(function(e){
     e.preventDefault();
@@ -19,7 +34,9 @@ $('#send-song').submit(function(e){
 $('#send-guess').submit(function(e){
   e.preventDefault();
   if ($('#song').val().toLowerCase() === match){
-      $('#answer').text("CORRECT").css({color: "green"})
+      clearInterval(interval);
+      interval = false;
+      $('#answer').text("CORRECT").css({color: "rgba(183, 215, 146,1)"})
       $('iframe').css({opacity: '1'})
       $('#send-song').css({display: ""})
       $('#send-guess').css({display: "none"})
@@ -28,10 +45,13 @@ $('#send-guess').submit(function(e){
       $('#hint').css({display: "none"})
       clicks = 0;
       addToScore(ppr);
-      ppr = 100;
+      ppr = 200;
+      submit = true;
   } else {
-      $('#answer').text("GUESS AGAIN").css({color: "red"})
-      ppr -= 10;
+      $('#answer').text("GUESS AGAIN").css({color: "rgba(238,113, 167,1)"})
+      if (ppr > 0) {
+        ppr -= 10;
+      }
   }
 });
 
@@ -45,6 +65,7 @@ $('#send-guess').submit(function(e){
     $('#send-song').css({display: "none"})
     $('#send-guess').css({display: ""})
     $('#hint').css({display: ""})
+    submit = false;
   });
 
   $('#hint').on('click',function(e){
@@ -52,7 +73,7 @@ $('#send-guess').submit(function(e){
     if (clicks === 0) {
       clicks += 1
       $('#hints').append($('<li>').text("ALBUM: " + data.album.name));
-      ppr = 75;
+      ppr -= 25;
     } else if (clicks === 1) {
       clicks += 1
       var artists = "";
@@ -70,25 +91,28 @@ $('#send-guess').submit(function(e){
         $('#hints').append($('<li>').text("ARTIST: " + artists));
       }
       artists = "";
-      ppr = 25;
+      ppr -= 25;
     } else if (clicks === 2) {
        clicks += 1;
       $('#hints').append($('<li>').html("<img src='"+data.album.images[1].url+"'>"));
-      ppr = 50;
+      ppr -= 25;
     } else if (clicks === 3) {
       $('#hints').append($('<li>').text("CLICK AGAIN FOR ANSWER"));
       clicks += 1
-    } else {
+    } else if(clicks === 4){
       $('#hints').append($('<li>').text("ANSWER: " + match));
       clicks += 1
+      clearInterval(interval);
       ppr = 0;
+      $('#ppr').text("Points: " + ppr);
+      $('#hint').css({display: "none"})
     }
 
   });
 
   function addToScore(points) {
     score += points;
-    $score.text("Score: " + score)
+    $score.text("Total Score: " + score)
   }
 
 
