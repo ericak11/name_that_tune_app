@@ -1,25 +1,3 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Name that tune</title>
-  </head>
-  <body>
-  <h1> NAME THAT TUNE </h1>
-  <h2 id="score"></h2>
-   <form id="send-song">
-      <input id="search" autocomplete="off" placeholder="song search query" /><input type="number" id="time" autocomplete="off" placeholder="time in seconds"/><button id="submit">SUBMIT</button>
-  </form>
-  <form id="send-guess" style="display: none;">
-    <input id="song" autocomplete="off" /><button id="submit">GUESS</button>
-  </form><button id="hint" style="display: none;">hint</button>
-  <ul id="hints"></ul>
-  <h2 id="answer"></h2>
-  <div id="spotify"></div>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-
-<script>
 var socket = io();
 var $btn = $('#spotify');
 var $track;
@@ -121,10 +99,3 @@ $('#send-guess').submit(function(e){
       match = track.toLowerCase();
     }
   }
-
-</script>
-
-  </body>
-</html>
-
-
