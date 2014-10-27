@@ -6,7 +6,6 @@ var https = require('https');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
-
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi();
 
@@ -24,22 +23,31 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   socket.on('parse spotify', function(item){
-    var query = item + " NOT live NOT version NOT vs";
+    var query = item + " NOT live NOT version NOT vs NOT karaoke NOT demo";
     spotifyApi.searchTracks(query, {limit: 1, market: "us"})
-     .then(function(data) {
-      var num = data.tracks.total - 50;
-      console.log(data);
-      console.log(num);
-      offset = Math.floor(Math.random() * num) + 1;
-    })
-     .then(spotifyApi.searchTracks(query, {limit: 50, market: "us", offset: offset})
       .then(function(data) {
-        console.log(data.tracks);
-        var song = data.tracks.items[Math.floor(Math.random()*data.tracks.items.length)];
-        io.emit('parse spotify', song);
-      }, function(err) {
-        console.log(offset)
-        console.error(err);
-      }));
+        var num = (data.tracks.total - 50)/2;
+        console.log(data);
+        console.log(num);
+        if (num > 250){
+          return Math.floor(Math.random() * 250) + 1;
+        } else if (num > 0) {
+          return Math.floor(Math.random() * num) + 1;
+        } else {
+          return 0;
+        }
+      })
+     .then(function(data) {
+      console.log("data" + data);
+        spotifyApi.searchTracks(query, {limit: 50, market: "us", offset: data})
+        .then(function(data) {
+          console.log(data.tracks);
+          var song = data.tracks.items[Math.floor(Math.random()*data.tracks.items.length)];
+          io.emit('parse spotify', song);
+        }, function(err) {
+          console.log(offset);
+          console.error(err);
+      });
+    });
   });
 });

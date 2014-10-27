@@ -5,26 +5,38 @@
     <link rel="stylesheet" href="styles.css">
     <link href='http://fonts.googleapis.com/css?family=Coming+Soon|Ribeye+Marrow' rel='stylesheet' type='text/css'>
   </head>
+
   <body>
-  <div id="header"><div id="logo"><img id="pic" height="100px" src="http://i.imgur.com/jGr86qG.jpg" /></a><h1 id="title"> Name That Tune </h1></div>
-  <div><h2 id="score"></h2></div></div>
-   <h2 id="answer"></h2>
-   <h2 id="ppr"></h2>
+  <div id="header">
+    <div id="logo">
+      <img id="pic" height="80px" src="http://i.imgur.com/jGr86qG.jpg" />
+      <h1 id="title"> Name That Tune </h1>
+    </div>
+    <div>
+      <h2 id="score"></h2>
+    </div>
+  </div>
+
+    <h2 id="answer"></h2>
+    <h2 id="ppr"></h2>
+
   <div id="content">
-   <form class="form" id="send-song">
-      <input id="search" autocomplete="off" placeholder="Song Search" /><button class="push_button red" id="submit">SUBMIT</button>
-  </form>
-  <form class="form" id="send-guess" style="display: none;">
-    <input id="song" autocomplete="off" /><button class="push_button red" id="submit">GUESS</button>
-  </form><button class="push_button blue" id="hint" style="display: none;">HINT</button>
-  <ul class="list" id="hints"></ul>
-</div>
+    <form class="form" id="send-song">
+      <input id="search" autocomplete="off" placeholder="Song Search" />
+      <button class="push_button red" id="submit">SUBMIT</button>
+    </form>
+    <form class="form" id="send-guess" style="display: none;">
+      <input id="song" autocomplete="off" />
+      <button class="push_button red" id="submit">GUESS</button>
+    </form>
+    <button class="push_button blue" id="hint" style="display: none;">HINT</button>
+    <ul class="list" id="hints"></ul>
+  </div>
   <div id="spotify"></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="/main.js"></script>
-
 
   </body>
 </html>
