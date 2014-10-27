@@ -50,4 +50,28 @@ io.on('connection', function(socket){
       });
     });
   });
+
+  socket.on('new score', function(score) {
+
+  });
+
+  socket.on('end round', function(ppr) {
+    console.log(socket.username);
+    io.emit('end round', socket.username);
+  });
+
+  socket.on('add user', function (username) {
+    // we store the username in the socket session for this client
+    socket.username = username;
+    // add the client's username to the global list
+    usernames[username] = username;
+    // socket.broadcast.emit('user joined', {
+    //   username: socket.username,
+    // });
+  });
+
+  socket.on('disconnect', function (username) {
+    console.log(socket.username);
+    delete usernames[socket.username];
+  });
 });

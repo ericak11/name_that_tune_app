@@ -15,6 +15,12 @@ var ppr = 200;
 var $score = $('#score');
 var interval = false;
 var submit = true;
+var username;
+
+$(document).ready(function(){
+  username  = prompt("whats your name?");
+  setUsername();
+});
 
 $btn.on('mouseover', function(){
   if (!interval && !submit) {
@@ -31,11 +37,18 @@ $('#send-song').submit(function(e){
 
 $('#send-guess').submit(function(e){
   e.preventDefault();
+  var message = "hello"
   if ($('#song').val().toLowerCase().trim() === match){
-    correctGuess();
+    console.log("YOU ARE HERE")
+    socket.emit('end round', message);
   } else {
-  incorrectGuess();
+    incorrectGuess();
   }
+});
+
+socket.on('end round', function(username) {
+  console.log("please");
+  correctGuess(username);
 });
 
 socket.on('parse spotify', function(song){
@@ -114,9 +127,14 @@ function time() {
   }
 }
 
-function correctGuess() {
-  $('#answer').text("CORRECT").css({color: "rgba(183, 215, 146,1)"});
-  resetToSubmitScreen();
+function correctGuess(name) {
+  if (name === username) {
+    $('#answer').text("CORRECT").css({color: "rgba(183, 215, 146,1)"});
+    resetToSubmitScreen(true);
+  } else {
+    $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
+    resetToSubmitScreen(false);
+  }
 }
 
 function incorrectGuess() {
@@ -128,7 +146,7 @@ function incorrectGuess() {
   }
 }
 
-function resetToSubmitScreen() {
+function resetToSubmitScreen(value) {
   clearInterval(interval);
   interval = false;
   var styles = {
@@ -143,7 +161,18 @@ function resetToSubmitScreen() {
   $('#hint').css({display: "none"});
   $('#play-button').css({display: "none"});
   clicks = 0;
-  addToScore(ppr);
-  ppr = 200;
   submit = true;
+  if (value) {
+    addToScore(ppr);
+  } else {
+    ppr = 0;
+    $('#ppr').text("Points: " + ppr);
+  }
+  ppr = 200;
+}
+
+function setUsername () {
+  if (username) {
+    socket.emit('add user', username);
+  }
 }
