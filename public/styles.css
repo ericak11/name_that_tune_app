@@ -15,6 +15,13 @@ body {
   margin-bottom: 5px;
 }
 
+#search-term {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  text-transform:capitalize;
+}
+
 #hints {
   margin-top: 0px;
 
@@ -30,6 +37,7 @@ body {
 #match-title {
   font-family: 'Coming Soon', cursive;
   font-size: 30px;
+  text-transform:capitalize;
 }
 
 #header {

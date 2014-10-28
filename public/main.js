@@ -52,7 +52,6 @@ $btn.on('mouseover', function(){
 $('#send-song').submit(function(e){
     e.preventDefault();
     socket.emit('parse spotify', $('#search').val());
-    $('#search').val('');
     $('#answer').text("");
 });
 
@@ -89,16 +88,19 @@ socket.on('start round', function(username) {
   showSearchScreen(username);
 });
 
-socket.on('parse spotify', function(song){
+socket.on('parse spotify', function(song, term){
   var link = song.uri;
   data = song;
   $track = song.name;
   getSongName(song.name);
   $btn.html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
   $('#error').text("");
+  $('#answer').text("");
   $('#welcome').css({display: "none"});
   $('#send-song').css({display: "none"});
   $('#search-message').css({display: "none"});
+  $('#search-term').text("Search Term: " + term);
+  $('#search').val('');
   $('#send-guess').css({display: ""});
   $('#hint').css({display: ""});
   $('#play-button').css({display: ""});

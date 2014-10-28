@@ -45,7 +45,7 @@ io.on('connection', function(socket){
         spotifyApi.searchTracks(query, {limit: 50, market: "us", offset: data})
         .then(function(data) {
           var song = data.tracks.items[Math.floor(Math.random()*data.tracks.items.length)];
-          io.emit('parse spotify', song);
+          io.emit('parse spotify', song, item);
         }, function(err) {
           io.emit('search error', {name: socket.username, error: err.error});
       });
