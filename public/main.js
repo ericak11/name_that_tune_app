@@ -26,6 +26,12 @@ $('#user-login').submit(function(e){
     }
 });
 
+socket.on('search error', function(info){
+  if (username === info.name) {
+    $('#error').text(info.error);
+  }
+});
+
 socket.on('logged in', function(username) {
   console.log(username.userId);
   $('.login').css({display: "none"});
@@ -84,6 +90,7 @@ socket.on('parse spotify', function(song){
   $track = song.name;
   getSongName(song.name);
   $btn.html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
+  $('#error').text("");
   $('#welcome').css({display: "none"});
   $('#send-song').css({display: "none"});
   $('#search-message').css({display: "none"});
@@ -154,6 +161,10 @@ function time() {
   if (ppr > 0) {
     ppr -= 1;
     $('#ppr').text("Points: " +ppr);
+  } else {
+    socket.emit('player out', username);
+    $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
+    resetToSubmitScreen();
   }
 }
 

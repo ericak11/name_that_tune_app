@@ -35,6 +35,9 @@ io.on('connection', function(socket){
           return Math.floor(Math.random() * 250) + 1;
         } else if (num > 0) {
           return Math.floor(Math.random() * num) + 1;
+        } else if (num < 1){
+          console.log("SEARCH ERROR")
+          io.emit('search error', {name: socket.username, error: "there were no results for that search, TRY AGAIN"});
         } else {
           return 0;
         }
@@ -47,6 +50,7 @@ io.on('connection', function(socket){
           var song = data.tracks.items[Math.floor(Math.random()*data.tracks.items.length)];
           io.emit('parse spotify', song);
         }, function(err) {
+          io.emit('search error', {name: socket.username, error: err.error});
           console.log(offset);
           console.error(err);
       });
@@ -55,20 +59,20 @@ io.on('connection', function(socket){
 
   socket.on('end round', function (ppr) {
     console.log(socket.username);
-    playersDone = 0;
     io.emit('end round', socket.username);
   });
 
   socket.on('start round', function (username) {
+    playersDone = 0;
     io.emit('start round', socket.username);
   });
 
   socket.on('player out', function (username) {
     playersDone += 1;
+    console.log("players done: " + playersDone + " usernames length: " + Object.keys(usernames).length)
     if (playersDone === Object.keys(usernames).length/2) {
       console.log("ROUND RESET")
       io.emit('round reset', socket.username);
-      playersDone = 0;
     }
   });
 
