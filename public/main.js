@@ -71,6 +71,11 @@ socket.on('end round', function(username) {
   correctGuess(username);
 });
 
+socket.on('call picker', function(picker) {
+  socket.emit('not picker');
+});
+
+
 socket.on('round reset', function(name) {
   $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
   if (name === username) {
@@ -98,6 +103,15 @@ socket.on('parse spotify', function(song){
   $('#hint').css({display: ""});
   $('#play-button').css({display: ""});
   submit = false;
+});
+
+socket.on('user num', function(num) {
+  if (num === 1) {
+    $('#num-users').text("There " + num + " players")
+  } else {
+    $('#num-users').text("There are " + num + " players")
+  }
+
 });
 
 $('#hint').on('click',function(e){

@@ -3,6 +3,13 @@ body {
   font-family: 'Coming Soon', cursive;
 }
 
+#scoreboard {
+  height: 50px;
+  border: 1px solid black;
+  display: inline-block;
+  width: 100%;
+}
+
 #ppr {
   margin-top: 5px;
   margin-bottom: 5px;
