@@ -31,8 +31,8 @@ io.on('connection', function(socket){
     spotifyApi.searchTracks(query, {limit: 1, market: "us"})
       .then(function(data) {
         var num = (data.tracks.total - 50)/2;
-        if (num > 250){
-          return Math.floor(Math.random() * 250) + 1;
+        if (num > 200){
+          return Math.floor(Math.random() * 200) + 1;
         } else if (num > 0) {
           return Math.floor(Math.random() * num) + 1;
         } else if (num < 1){

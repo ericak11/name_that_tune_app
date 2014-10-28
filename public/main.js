@@ -107,7 +107,7 @@ socket.on('parse spotify', function(song){
 
 socket.on('user num', function(num) {
   if (num === 1) {
-    $('#num-users').text("There " + num + " players")
+    $('#num-users').text("There is " + num + " player")
   } else {
     $('#num-users').text("There are " + num + " players")
   }
