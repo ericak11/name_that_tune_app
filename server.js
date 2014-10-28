@@ -66,7 +66,8 @@ io.on('connection', function(socket){
   socket.on('player out', function (username) {
     playersDone += 1;
     if (playersDone === Object.keys(usernames).length/2) {
-      io.emit('end round', socket.username);
+      console.log("ROUND RESET")
+      io.emit('round reset', socket.username);
       playersDone = 0;
     }
   });

@@ -16,7 +16,7 @@ var $score = $('#score');
 var interval = false;
 var submit = true;
 var username;
-
+var loggedIn = false;
 
 $('#user-login').submit(function(e){
     e.preventDefault();
@@ -62,8 +62,16 @@ $('#send-guess').submit(function(e){
 });
 
 socket.on('end round', function(username) {
-  console.log("please");
   correctGuess(username);
+});
+
+socket.on('round reset', function(name) {
+  $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
+  if (name === username) {
+    resetNoWinner(true);
+  } else {
+    resetNoWinner(false);
+  }
 });
 
 socket.on('start round', function(username) {
@@ -202,4 +210,27 @@ function showSearchScreen(name) {
     $('#search-message').css({display: ""});
     $('#search-message').text("It's "+ name +"'s turn to search for a song")
   }
+}
+
+function resetNoWinner(value) {
+  clearInterval(interval);
+  interval = false;
+  var styles = {
+    "opacity": "1",
+    "margin-top": "-40px"
+  };
+  $('iframe').css(styles);
+  $('#send-guess').css({display: "none"});
+  $('#song').val('');
+  $('#hints').empty();
+  $('#hint').css({display: "none"});
+  $('#play-button').css({display: "none"});
+  clicks = 0;
+  submit = true;
+  ppr = 0;
+  $('#ppr').text("Points: " + ppr);
+  if (value) {
+    socket.emit('start round', username);
+  }
+  ppr = 200;
 }
