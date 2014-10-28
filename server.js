@@ -15,7 +15,9 @@ server.listen(server_port, server_host);
 app.use(express.static(__dirname + '/public'));
 
 var usernames = {};
+var userId = 0;
 var offset;
+var playersDone = 0;
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
@@ -51,27 +53,41 @@ io.on('connection', function(socket){
     });
   });
 
-  socket.on('new score', function(score) {
-
-  });
-
-  socket.on('end round', function(ppr) {
+  socket.on('end round', function (ppr) {
     console.log(socket.username);
+    playersDone = 0;
     io.emit('end round', socket.username);
   });
 
+  socket.on('start round', function (username) {
+    io.emit('start round', socket.username);
+  });
+
+  socket.on('player out', function (username) {
+    playersDone += 1;
+    if (playersDone === Object.keys(usernames).length/2) {
+      io.emit('end round', socket.username);
+      playersDone = 0;
+    }
+  });
+
   socket.on('add user', function (username) {
-    // we store the username in the socket session for this client
     socket.username = username;
-    // add the client's username to the global list
+    userId += 1;
+    socket.userId = userId;
     usernames[username] = username;
-    // socket.broadcast.emit('user joined', {
-    //   username: socket.username,
-    // });
+    usernames[userId] = userId;
+    console.log(socket.userId);
+    io.emit('logged in', {username: username, userId: userId});
   });
 
   socket.on('disconnect', function (username) {
-    console.log(socket.username);
     delete usernames[socket.username];
+    delete usernames[socket.userId];
+    if (Object.keys(usernames).length < 1) {
+      console.log("reset");
+      userId = 0;
+    }
   });
+
 });

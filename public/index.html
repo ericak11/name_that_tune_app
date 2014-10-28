@@ -6,7 +6,7 @@
     <link href='http://fonts.googleapis.com/css?family=Coming+Soon|Ribeye+Marrow' rel='stylesheet' type='text/css'>
   </head>
 
-  <body>
+<body>
   <div id="header">
     <div id="logo">
       <img id="pic" height="80px" src="http://i.imgur.com/jGr86qG.jpg" />
@@ -16,12 +16,20 @@
       <h2 id="score"></h2>
     </div>
   </div>
-
-    <h2 id="answer"></h2>
-    <h2 id="ppr"></h2>
-
+<div class="login">
+  <form class="form" id="user-login">
+    <label>Please input your name:</label>
+    <input id="login" autocomplete="off"/>
+    <button class="push_button red" id="login-submit">SUBMIT</button>
+  </form>
+</div>
+<div class="game" style="display: none;">
+  <h2 id="answer"></h2>
+  <h2 id="ppr"></h2>
   <div id="content">
-    <form class="form" id="send-song">
+    <p id="welcome">A round is already in progress...</p>
+    <p id="search-message"></p>
+    <form class="form" id="send-song" style="display: none;">
       <input id="search" autocomplete="off" placeholder="Song Search" />
       <button class="push_button red" id="submit">SUBMIT</button>
     </form>
@@ -33,12 +41,13 @@
     <ul class="list" id="hints"></ul>
   </div>
   <div id="spotify"></div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="/main.js"></script>
 
-  </body>
+</body>
 </html>
 
 

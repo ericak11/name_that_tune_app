@@ -17,9 +17,24 @@ var interval = false;
 var submit = true;
 var username;
 
-$(document).ready(function(){
-  username  = prompt("whats your name?");
-  setUsername();
+
+$('#user-login').submit(function(e){
+    e.preventDefault();
+    username = $('#login').val()
+    if (username) {
+      socket.emit('add user', username);
+    }
+});
+
+socket.on('logged in', function(username) {
+  console.log(username.userId);
+  $('.login').css({display: "none"});
+  $('.game').css({display: ""});
+  if (username.userId === 1) {
+    $('#welcome').css({display: "none"});
+    $('#send-song').css({display: ""});
+    $('#search-message').text("It's your turn to search for a song!");
+  }
 });
 
 $btn.on('mouseover', function(){
@@ -51,13 +66,19 @@ socket.on('end round', function(username) {
   correctGuess(username);
 });
 
+socket.on('start round', function(username) {
+  showSearchScreen(username);
+});
+
 socket.on('parse spotify', function(song){
   var link = song.uri;
   data = song;
   $track = song.name;
   getSongName(song.name);
   $btn.html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
+  $('#welcome').css({display: "none"});
   $('#send-song').css({display: "none"});
+  $('#search-message').css({display: "none"});
   $('#send-guess').css({display: ""});
   $('#hint').css({display: ""});
   $('#play-button').css({display: ""});
@@ -99,6 +120,7 @@ $('#hint').on('click',function(e){
     ppr = 0;
     $('#ppr').text("Points: " + ppr);
     $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
+    socket.emit('player out', username);
     resetToSubmitScreen();
   }
 });
@@ -154,7 +176,6 @@ function resetToSubmitScreen(value) {
     "margin-top": "-40px"
   };
   $('iframe').css(styles);
-  $('#send-song').css({display: ""});
   $('#send-guess').css({display: "none"});
   $('#song').val('');
   $('#hints').empty();
@@ -164,6 +185,7 @@ function resetToSubmitScreen(value) {
   submit = true;
   if (value) {
     addToScore(ppr);
+    socket.emit('start round', username);
   } else {
     ppr = 0;
     $('#ppr').text("Points: " + ppr);
@@ -171,8 +193,13 @@ function resetToSubmitScreen(value) {
   ppr = 200;
 }
 
-function setUsername () {
-  if (username) {
-    socket.emit('add user', username);
+function showSearchScreen(name) {
+  if (username === name) {
+    $('#send-song').css({display: ""});
+    $('#search-message').css({display: ""});
+    $('#search-message').text("It's your turn to search for a song")
+  } else {
+    $('#search-message').css({display: ""});
+    $('#search-message').text("It's "+ name +"'s turn to search for a song")
   }
 }
