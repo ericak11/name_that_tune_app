@@ -20,6 +20,7 @@ var offset;
 var playersDone = 0;
 var numUsers = 0;
 var picker = false;
+var scores = {};
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
@@ -82,6 +83,7 @@ io.on('connection', function(socket){
     socket.userId = userId;
     socket.picker = picker;
     usernames[username] = username;
+    scores[socket.username] = 0;
     numUsers += 1;
     if (userId === 1) {
       socket.picker = true;
@@ -90,8 +92,17 @@ io.on('connection', function(socket){
     io.emit('user num',  numUsers);
   });
 
+  socket.on('send score', function (score) {
+    scores[socket.username] = score;
+    console.log("scores: " + scores)
+    io.emit('update scores',  scores);
+  });
+
   socket.on('disconnect', function (username) {
     delete usernames[socket.username];
+    console.log("SCORE" + scores[socket.username]);
+    delete scores[socket.username];
+    io.emit('update scores',  scores);
     if (socket.picker) {
       io.emit('start round', usernames[Object.keys(usernames)[0]]);
     }
@@ -99,6 +110,7 @@ io.on('connection', function(socket){
     console.log("NUM USERS: " + numUsers)
     io.emit('user num',  numUsers);
     if (Object.keys(usernames).length < 1) {
+      scores = {}
       numUsers = 0;
       console.log("reset");
       userId = 0;
@@ -106,3 +118,4 @@ io.on('connection', function(socket){
   });
 
 });
+

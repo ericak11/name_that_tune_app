@@ -17,6 +17,7 @@ var interval = false;
 var submit = true;
 var username;
 var loggedIn = false;
+var scores;
 
 $('#user-login').submit(function(e){
     e.preventDefault();
@@ -74,6 +75,14 @@ socket.on('call picker', function(picker) {
   socket.emit('not picker');
 });
 
+socket.on('update scores', function(score){
+  $('#scores').empty();
+  scores = score;
+  for(var key in scores) {
+    var val = scores[key];
+    $('#scores').append($('<li>').addClass("scores-list").html("<b>"+key+"</b> : "+val+" "));
+  }
+});
 
 socket.on('round reset', function(name) {
   $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
@@ -159,6 +168,7 @@ $('#hint').on('click',function(e){
 function addToScore(points) {
   score += points;
   $score.text("Total Score: " + score);
+  socket.emit('send score', score);
 }
 
 function getSongName(track) {
@@ -220,6 +230,7 @@ function resetToSubmitScreen(value) {
   submit = true;
   if (value) {
     addToScore(ppr);
+    socket.emit('send scores', score);
     socket.emit('start round', username);
   } else {
     ppr = 0;
