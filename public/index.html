@@ -24,6 +24,21 @@
     <button class="push_button red" id="login-submit">SUBMIT</button>
   </form>
 </div>
+<div class="lobby" style="display: none;">
+
+  <form class="form" id="pick-room">
+    <label> Select a room: </label>
+    <select id="select"></select>
+    <button class="push_button red" id="goto-room">GO</button>
+  </form>
+  <h3> OR </h3>
+  <p id="room-exists"></p>
+  <form class="form" id="create-room">
+    <label> create a room: </label>
+  <input id="room-name" autocomplete="off" placeholder="Room Name" />
+    <button class="push_button blue" id="new-room">CREATE</button>
+  </form>
+</div>
 <div class="game" style="display: none;">
   <div id="scoreboard"><p id="num-users"></p><ul id="scores"></ul></div>
   <h2 id="answer"></h2>
@@ -49,6 +64,8 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/login.js"></script>
+<script src="/rooms.js"></script>
 <script src="/main.js"></script>
 
 </body>
