@@ -3,6 +3,40 @@ body {
   font-family: 'Coming Soon', cursive;
 }
 
+#scores {
+  padding-left: 5px;
+}
+
+#scores li{
+  display: inline;
+  float: left;
+  text-transform:capitalize;
+}
+
+#goto-room {
+  height: 30px;
+  line-height: 33px;
+  margin-top: 40px;
+}
+
+
+.scores-list {
+  padding-left: 10px;
+}
+
+#num-users {
+  float: right;
+  padding-right: 10px;
+}
+
+#leave {
+  float: right;
+  padding-right: 10px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 10px;
+}
+
 #scoreboard {
   height: 50px;
   border: 1px solid black;
@@ -19,6 +53,11 @@ body {
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: 20px;
+  text-transform:capitalize;
+}
+#room-welcome {
+  margin-top: 5px;
+  margin-bottom: 5px;
   text-transform:capitalize;
 }
 

@@ -1,5 +1,4 @@
 var socket = io();
-var $btn = $('#spotify');
 // full track name
 var $track;
 // guess match name
@@ -12,19 +11,9 @@ var clicks = 0;
 var score = 0;
 // points per round
 var ppr = 200;
-var $score = $('#score');
 var interval = false;
 var submit = true;
-var username;
-var loggedIn = false;
-
-$('#user-login').submit(function(e){
-    e.preventDefault();
-    username = $('#login').val()
-    if (username) {
-      socket.emit('add user', username);
-    }
-});
+var scores;
 
 socket.on('search error', function(info){
   if (username === info.name) {
@@ -32,21 +21,23 @@ socket.on('search error', function(info){
   }
 });
 
-socket.on('logged in', function(username) {
-  console.log(username.userId);
-  $('.login').css({display: "none"});
-  $('.game').css({display: ""});
-  if (username.userId === 1) {
-    $('#welcome').css({display: "none"});
-    $('#send-song').css({display: ""});
-    $('#search-message').text("It's your turn to search for a song!");
-  }
-});
-
-$btn.on('mouseover', function(){
+$('#spotify').on('mouseover', function(){
   if (!interval && !submit) {
     interval = setInterval(time, 1000);
   }
+});
+
+$('#leave').on('click', function(e){
+    e.preventDefault();
+    $('#send-guess').css({display: "none"});
+    $('#song').val('');
+    $('#hints').empty();
+    $('#hint').css({display: "none"});
+    $('#play-button').css({display: "none"});
+    $('#search-term').text("");
+    clicks = 0;
+    submit = true;
+    socket.emit('leave room', username);
 });
 
 $('#send-song').submit(function(e){
@@ -74,6 +65,14 @@ socket.on('call picker', function(picker) {
   socket.emit('not picker');
 });
 
+socket.on('update scores', function(score){
+  $('#scores').empty();
+  scores = score;
+  for(var key in scores) {
+    var val = scores[key];
+    $('#scores').append($('<li>').addClass("scores-list").html("<b>"+key+"</b> : "+val+" "));
+  }
+});
 
 socket.on('round reset', function(name) {
   $('#answer').html("The correct answer is: <div id='match-title'>" + match + "</div>").css({color: "rgba(183, 215, 146,1)"});
@@ -93,7 +92,7 @@ socket.on('parse spotify', function(song, term){
   data = song;
   $track = song.name;
   getSongName(song.name);
-  $btn.html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
+  $('#spotify').html("<h1 class='push_button blue' id='play-button'>PLAY SONG</h1><iframe src='https://embed.spotify.com/?uri=spotify:track:"+link+"'  width='300' height='380' frameborder='0' allowtransparency='true' style='opacity: 0;'></iframe>");
   $('#error').text("");
   $('#answer').text("");
   $('#welcome').css({display: "none"});
@@ -158,7 +157,8 @@ $('#hint').on('click',function(e){
 
 function addToScore(points) {
   score += points;
-  $score.text("Total Score: " + score);
+  $('#score').text("Total Score: " + score);
+  socket.emit('send score', score);
 }
 
 function getSongName(track) {
@@ -220,6 +220,7 @@ function resetToSubmitScreen(value) {
   submit = true;
   if (value) {
     addToScore(ppr);
+    socket.emit('send scores', score);
     socket.emit('start round', username);
   } else {
     ppr = 0;
@@ -230,6 +231,7 @@ function resetToSubmitScreen(value) {
 
 function showSearchScreen(name) {
   if (username === name) {
+    socket.emit('reset picker');
     $('#send-song').css({display: ""});
     $('#search-message').css({display: ""});
     $('#search-message').text("It's your turn to search for a song")
