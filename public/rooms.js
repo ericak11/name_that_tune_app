@@ -4,9 +4,10 @@ $('#pick-room').submit(function(e){
     socket.emit('join room', $("#select").val());
 });
 
-socket.on('joined', function(username) {
+socket.on('joined', function(username, room) {
   $('.lobby').css({display: "none"});
   $('.game').css({display: ""});
+   $('#room-welcome').text("Welcome to the " + room + " Room");
   if (username.picker) {
     $('#welcome').css({display: "none"});
     $('#send-song').css({display: ""});

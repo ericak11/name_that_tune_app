@@ -11,7 +11,9 @@ $('#user-login').submit(function(e){
 
 socket.on('logged in', function(rooms) {
   $('.login').css({display: "none"});
+  $('.game').css({display: "none"});
   $('.lobby').css({display: ""});
+  $('#select').empty();
   $(rooms).each(function() {
     $('#select').append($("<option>").attr('value',this).text(this));
   });

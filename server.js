@@ -38,17 +38,12 @@ io.on('connection', function(socket){
     spotifyApi.searchTracks(query, {limit: 1, market: "us"})
       .then(function(data) {
         console.log(data)
-        var num;
-        if (data.tracks.total > 50) {
-          num = (data.tracks.total - 50);
-        } else {
-          num =  data.tracks.total
-        }
-        if (num > 200){
+        var num = (data.tracks.total);
+        if (num > 250){
           return Math.floor(Math.random() * 200) + 1;
         } else if (num > 50) {
-          return Math.floor(Math.random() * num) + 1;
-        } else if (num < 1){
+          return Math.floor(Math.random() * num-50) + 1;
+        } else if (num === 0){
           io.to(socket.room).emit('search error', {name: socket.username, error: "there were no results for that search, TRY AGAIN"});
         } else {
           return 0;
@@ -152,10 +147,31 @@ io.on('connection', function(socket){
     }
     socket.room =  room;
     scores[socket.room][socket.username] = 0;
-    socket.emit('joined', {username: socket.username, picker: socket.picker});
+    socket.emit('joined', {username: socket.username, picker: socket.picker}, socket.room);
     io.to(socket.room).emit('user num',  userNum);
   });
 
+  socket.on('leave room', function () {
+    socket.leave(socket.room);
+    delete scores[socket.room][socket.username];
+    io.to(socket.room).emit('update scores',  scores[socket.room]);
+    var userNum = Object.keys(io.sockets.adapter.rooms[socket.room]).length;
+    var name;
+    if (socket.picker) {
+      for(var key in scores[socket.room]) {
+        name = key;
+      }
+      io.to(socket.room).emit('start round', name);
+    }
+    io.to(socket.room).emit('user num', userNum);
+    if (userNum < 1) {
+      scores[socket.room] = {}
+      if (!_.has(genreRooms, socket.room)) {
+        rooms = _.without(rooms, socket.room);
+      }
+    }
+    socket.emit('logged in', rooms);
+  });
 
 });
 

@@ -29,6 +29,14 @@ body {
   padding-right: 10px;
 }
 
+#leave {
+  float: right;
+  padding-right: 10px;
+  height: 25px;
+  line-height: 25px;
+  font-size: 10px;
+}
+
 #scoreboard {
   height: 50px;
   border: 1px solid black;
@@ -45,6 +53,11 @@ body {
   margin-top: 5px;
   margin-bottom: 5px;
   font-size: 20px;
+  text-transform:capitalize;
+}
+#room-welcome {
+  margin-top: 5px;
+  margin-bottom: 5px;
   text-transform:capitalize;
 }
 
