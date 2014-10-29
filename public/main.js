@@ -226,7 +226,7 @@ function showSearchScreen(name) {
     socket.emit('reset picker');
     $('#send-song').css({display: ""});
     $('#search-message').css({display: ""});
-    $('#search-message').text("It's your turn to search for a song")
+    $('#search-message').html("It's your turn to search for a song!<br>Try entering common words or names (ie. woman or billy).<br> If you would like to increase the difficulty enter a single letter.")
   } else {
     $('#search-message').css({display: ""});
     $('#search-message').text("It's "+ name +"'s turn to search for a song")
