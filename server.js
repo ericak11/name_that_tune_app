@@ -39,10 +39,11 @@ io.on('connection', function(socket){
       .then(function(data) {
         console.log(data)
         var num = (data.tracks.total);
+        console.log("num"+num)
         if (num > 250){
           return Math.floor(Math.random() * 200) + 1;
         } else if (num > 50) {
-          return Math.floor(Math.random() * num-50) + 1;
+          return Math.floor(Math.random() * (num-50)) + 1;
         } else if (num === 0){
           io.to(socket.room).emit('search error', {name: socket.username, error: "there were no results for that search, TRY AGAIN"});
         } else {

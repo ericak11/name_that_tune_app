@@ -7,7 +7,8 @@ $('#pick-room').submit(function(e){
 socket.on('joined', function(username, room) {
   $('.lobby').css({display: "none"});
   $('.game').css({display: ""});
-   $('#room-welcome').text("Welcome to the " + room + " Room");
+  $('#room-welcome').text("Welcome to the " + room + " Room");
+  restoreDefault();
   if (username.picker) {
     $('#welcome').css({display: "none"});
     $('#send-song').css({display: ""});
@@ -28,3 +29,23 @@ socket.on('room created', function(roomName) {
 socket.on('room exists', function(roomName) {
   $('#room-exists').text(roomName + " already exists, please try again.")
 });
+
+
+function restoreDefault() {
+  $('#answer').text("");
+  $('#ppr').text("");
+  $('#search-term').text("");
+  $('#send-guess').css({display: "none"});
+  $('#song').val('');
+  $('#hints').empty();
+  $('#hint').css({display: "none"});
+  $('#play-button').css({display: "none"});
+  $('iframe').css({display: "none"});
+  clicks = 0;
+  score = 0;
+  ppr = 200;
+  interval = false;
+  submit = true;
+  $('#score').text("Total Score: " + score);
+  socket.emit('send score', score);
+}

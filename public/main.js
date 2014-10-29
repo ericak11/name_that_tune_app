@@ -29,14 +29,6 @@ $('#spotify').on('mouseover', function(){
 
 $('#leave').on('click', function(e){
     e.preventDefault();
-    $('#send-guess').css({display: "none"});
-    $('#song').val('');
-    $('#hints').empty();
-    $('#hint').css({display: "none"});
-    $('#play-button').css({display: "none"});
-    $('#search-term').text("");
-    clicks = 0;
-    submit = true;
     socket.emit('leave room', username);
 });
 
@@ -263,3 +255,4 @@ function resetNoWinner(value) {
   }
   ppr = 200;
 }
+
