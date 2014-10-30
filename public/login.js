@@ -3,7 +3,7 @@ var username;
 
 $('#user-login').submit(function(e){
     e.preventDefault();
-    username = $('#login').val()
+    username = $('#login').val();
     if (username) {
       socket.emit('add user', username);
     }

@@ -1,5 +1,4 @@
-
-var _ = require('underscore')
+var _ = require('underscore');
 var express = require('express');
 var app = express();
 var http = require('http');
@@ -37,9 +36,7 @@ io.on('connection', function(socket){
     }
     spotifyApi.searchTracks(query, {limit: 1, market: "us"})
       .then(function(data) {
-        console.log(data)
         var num = (data.tracks.total);
-        console.log("num"+num)
         if (num > 250){
           return Math.floor(Math.random() * 200) + 1;
         } else if (num > 50) {
@@ -51,13 +48,11 @@ io.on('connection', function(socket){
         }
       })
      .then(function(data) {
-        console.log(data)
         spotifyApi.searchTracks(query, {limit: 50, market: "us", offset: data})
         .then(function(data) {
           var song = data.tracks.items[Math.floor(Math.random()*data.tracks.items.length)];
           io.to(socket.room).emit('parse spotify', song, item);
         }, function(err) {
-          console.log(offset);
           io.to(socket.room).emit('search error', {name: socket.username, error: err.error});
       });
     });
@@ -68,7 +63,7 @@ io.on('connection', function(socket){
       socket.emit('room exists', roomName);
     } else {
       rooms.push(roomName);
-      scores[roomName] = {}
+      scores[roomName] = {};
       socket.emit('room created', roomName);
     }
   });
@@ -130,7 +125,7 @@ io.on('connection', function(socket){
       }
       io.to(socket.room).emit('user num', userNum);
       if (userNum < 1) {
-        scores[socket.room] = {}
+        scores[socket.room] = {};
         if (!_.has(genreRooms, socket.room)) {
           rooms = _.without(rooms, socket.room);
         }
@@ -166,7 +161,7 @@ io.on('connection', function(socket){
     }
     io.to(socket.room).emit('user num', userNum);
     if (userNum < 1) {
-      scores[socket.room] = {}
+      scores[socket.room] = {};
       if (!_.has(genreRooms, socket.room)) {
         rooms = _.without(rooms, socket.room);
       }

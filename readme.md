@@ -8,7 +8,7 @@ This app was developed by Erica Kantor as a final project for a Web development 
 
 ###Technologies Used
 
-- [Node.j](http://nodejs.org) '0.10.29'
+- [Node.js](http://nodejs.org) '0.10.29'
 - [express](http://expressjs.com) '4.0.0'
 - [socket.io](http://socket.io)'1.1.0'
 - [spotify-web-api-node](https://github.com/thelinmichael/spotify-web-api-node) '1.1.0'

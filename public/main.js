@@ -40,9 +40,8 @@ $('#send-song').submit(function(e){
 
 $('#send-guess').submit(function(e){
   e.preventDefault();
-  var message = "hello"
+  var message = "hello";
   if ($('#song').val().toLowerCase().trim() === match){
-    console.log("YOU ARE HERE")
     socket.emit('end round', message);
   } else {
     incorrectGuess();
@@ -100,9 +99,9 @@ socket.on('parse spotify', function(song, term){
 
 socket.on('user num', function(num) {
   if (num === 1) {
-    $('#num-users').text("There is " + num + " player")
+    $('#num-users').text("There is " + num + " player");
   } else {
-    $('#num-users').text("There are " + num + " players")
+    $('#num-users').text("There are " + num + " players");
   }
 
 });
@@ -226,10 +225,10 @@ function showSearchScreen(name) {
     socket.emit('reset picker');
     $('#send-song').css({display: ""});
     $('#search-message').css({display: ""});
-    $('#search-message').html("It's your turn to search for a song!<br>Try entering common words or names (ie. woman or billy).<br> If you would like to increase the difficulty enter a single letter.")
+    $('#search-message').html("It's your turn to search for a song!<br>Try entering common words or names (ie. woman or billy).<br> If you would like to increase the difficulty enter a single letter.");
   } else {
     $('#search-message').css({display: ""});
-    $('#search-message').text("It's "+ name +"'s turn to search for a song")
+    $('#search-message').text("It's "+ name +"'s turn to search for a song");
   }
 }
 

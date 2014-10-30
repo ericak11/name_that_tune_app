@@ -27,7 +27,7 @@ socket.on('room created', function(roomName) {
 });
 
 socket.on('room exists', function(roomName) {
-  $('#room-exists').text(roomName + " already exists, please try again.")
+  $('#room-exists').text(roomName + " already exists, please try again.");
 });
 
 
