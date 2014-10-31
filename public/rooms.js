@@ -44,6 +44,7 @@ function restoreDefault() {
   clicks = 0;
   score = 0;
   ppr = 200;
+  clearInterval(interval);
   interval = false;
   submit = true;
   $('#score').text("Total Score: " + score);
