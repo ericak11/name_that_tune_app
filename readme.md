@@ -28,3 +28,4 @@ This app was developed by Erica Kantor as a final project for a Web development 
 - If the points per round hits 0 for all players before someone guesses the song a new round is begun
 - A user can leave a room
 
+### Future Features
