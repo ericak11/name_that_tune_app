@@ -29,3 +29,4 @@ This app was developed by Erica Kantor as a final project for a Web development 
 - A user can leave a room
 
 ### Future Features
+- Diffuculty levels based on room name
